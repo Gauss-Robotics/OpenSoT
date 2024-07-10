@@ -8,6 +8,7 @@
 #include <OpenSoT/tasks/velocity/Gaze.h>
 #include <OpenSoT/tasks/velocity/Manipulability.h>
 #include <OpenSoT/tasks/velocity/MinimumEffort.h>
+#include <OpenSoT/tasks/velocity/CartesianAdmittance.h>
 
 namespace py = pybind11;
 using namespace OpenSoT::tasks::velocity;
@@ -55,6 +56,12 @@ void pyVelocityCartesian(py::module& m) {
           .def_property_readonly("distalLink", &Cartesian::getDistalLink)
           .def_property_readonly("baseLink", &Cartesian::getBaseLink)
           .def_property_readonly("baseLinkIsWorld", &Cartesian::baseLinkIsWorld);
+}
+
+void pyVelocityCartesianAdmittance(py::module & m){
+    py::class_<CartesianAdmittance, std::shared_ptr<CartesianAdmittance>, Task<Eigen::MatrixXd, Eigen::VectorXd>>(m, "CartesianAdmittance")
+          .def(py::init<std::string, XBot::ModelInterface&, std::string, XBot::ForceTorqueSensor::ConstPtr>());
+
 }
 
 void pyVelocityAngularMomentum(py::module& m) {

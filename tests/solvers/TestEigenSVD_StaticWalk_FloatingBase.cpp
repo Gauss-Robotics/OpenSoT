@@ -37,10 +37,10 @@ namespace{
 
 KDL::Frame poseEigenToKDL(const Eigen::Affine3d& T)
 {
-    tf::Pose tmp;
-    tf::poseEigenToTF(T, tmp);
+    tf2::Pose tmp;
+    tf2::poseEigenToTF(T, tmp);
     KDL::Frame tmp2;
-    tf::poseTFToKDL(tmp, tmp2);
+    tf2::poseTFToKDL(tmp, tmp2);
     return tmp2;
 }
 
@@ -384,7 +384,7 @@ public:
         if(IS_ROSCORE_RUNNING){
 
             _n.reset(new ros::NodeHandle());
-            world_broadcaster.reset(new tf::TransformBroadcaster());
+            world_broadcaster.reset(new tf2::TransformBroadcaster());
 
         }
     }
@@ -526,10 +526,10 @@ public:
             Eigen::Affine3d world_T_bl;
             _model_ptr->getPose("Waist",world_T_bl);
 
-            tf::Transform anchor_T_world;
-            tf::transformEigenToTF(world_T_bl, anchor_T_world);
+            tf2::Transform anchor_T_world;
+            tf2::transformEigenToTF(world_T_bl, anchor_T_world);
 
-            world_broadcaster->sendTransform(tf::StampedTransform(
+            world_broadcaster->sendTransform(tf2::StampedTransform(
                 anchor_T_world.inverse(), joint_msg.header.stamp,
                 "Waist", "world"));
 
@@ -561,7 +561,7 @@ public:
     std::shared_ptr<trajectory_utils::trajectory_publisher> r_wrist_trj_pub;
 
     ros::Publisher joint_state_pub;
-    std::shared_ptr<tf::TransformBroadcaster> world_broadcaster;
+    std::shared_ptr<tf2::TransformBroadcaster> world_broadcaster;
 
     rviz_visual_tools::RvizVisualToolsPtr visual_tools;
 

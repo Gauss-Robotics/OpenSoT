@@ -16,7 +16,7 @@
 #include "qp_estimation.h"
 #include <sensor_msgs/JointState.h>
 #include "../../tests/common.h"
-#include <eigen_conversions/eigen_kdl.h>
+#include <tf2_eigen_kdl/tf2_eigen_kdl.hpp>
 
 
 bool IS_ROSCORE_RUNNING;
@@ -229,7 +229,7 @@ namespace{
               **/
             if(IS_ROSCORE_RUNNING){
                 _n.reset(new ros::NodeHandle());
-                world_broadcaster.reset(new tf::TransformBroadcaster());
+                world_broadcaster.reset(new tf2::TransformBroadcaster());
             }
         }
 
@@ -357,10 +357,10 @@ namespace{
                 Eigen::Affine3d world_T_bl;
                 _model_ptr->getPose("Waist",world_T_bl);
 
-                tf::Transform anchor_T_world;
-                tf::transformEigenToTF(world_T_bl, anchor_T_world);
+                tf2::Transform anchor_T_world;
+                tf2::transformEigenToTF(world_T_bl, anchor_T_world);
 
-                world_broadcaster->sendTransform(tf::StampedTransform(
+                world_broadcaster->sendTransform(tf2::StampedTransform(
                     anchor_T_world.inverse(), joint_msg.header.stamp,
                     "Waist", "world"));
 
@@ -376,7 +376,7 @@ namespace{
         std::shared_ptr<trajectory_utils::trajectory_publisher> com_trj_pub, l_sole_trj_pub, r_sole_trj_pub, r_wrist_trj_pub;
 
         ros::Publisher joint_state_pub;
-        std::shared_ptr<tf::TransformBroadcaster> world_broadcaster;
+        std::shared_ptr<tf2::TransformBroadcaster> world_broadcaster;
 
         rviz_visual_tools::RvizVisualToolsPtr visual_tools;
 
@@ -435,9 +435,9 @@ namespace{
               * @brief Initialize trajectories, publiahers and walking stack
               **/
             KDL::Frame com_init_kdl, l_foot_init_kdl, r_foot_init_kdl;
-            tf::transformEigenToKDL(com_init, com_init_kdl);
-            tf::transformEigenToKDL(l_foot_init, l_foot_init_kdl);
-            tf::transformEigenToKDL(r_foot_init, r_foot_init_kdl);
+            tf2::transformEigenToKDL(com_init, com_init_kdl);
+            tf2::transformEigenToKDL(l_foot_init, l_foot_init_kdl);
+            tf2::transformEigenToKDL(r_foot_init, r_foot_init_kdl);
             this->initTrj(com_init_kdl, l_foot_init_kdl, r_foot_init_kdl);
             this->initTrjPublisher();
             theWalkingStack ws(*_model_ptr);
@@ -518,8 +518,8 @@ namespace{
             Eigen::Affine3d r_wrist_init; _model_ptr->getPose("r_wrist","DWYTorso",r_wrist_init);
 
             KDL::Frame r_wrist_init_kdl;
-            tf::transformEigenToKDL(r_wrist_init, r_wrist_init_kdl);
-            tf::transformEigenToKDL(com_init, com_init_kdl);
+            tf2::transformEigenToKDL(r_wrist_init, r_wrist_init_kdl);
+            tf2::transformEigenToKDL(com_init, com_init_kdl);
             this->initManipTrj(com_init_kdl,  r_wrist_init_kdl);
             this->initManipTrjPublisher();
 
@@ -590,9 +590,9 @@ namespace{
         this->_model_ptr->getPose("r_sole", r_foot_init);
 
 
-        tf::transformEigenToKDL(com_init, com_init_kdl);
-        tf::transformEigenToKDL(l_foot_init, l_foot_init_kdl);
-        tf::transformEigenToKDL(r_foot_init, r_foot_init_kdl);
+        tf2::transformEigenToKDL(com_init, com_init_kdl);
+        tf2::transformEigenToKDL(l_foot_init, l_foot_init_kdl);
+        tf2::transformEigenToKDL(r_foot_init, r_foot_init_kdl);
         this->initTrj(com_init_kdl, l_foot_init_kdl, r_foot_init_kdl);
         this->initTrjPublisher();
 

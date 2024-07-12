@@ -1,14 +1,14 @@
 message("**** Creating target release_deb to generate .deb for ${PROJECT_NAME}, to use it type: make release_deb ****")
 include (InstallRequiredSystemLibraries)
 
-set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/xbot" CACHE PATH "Deb package install prefix")
+set(CPACK_PACKAGING_INSTALL_PREFIX "/usr/local" CACHE PATH "Deb package install prefix")
 set(CPACK_GENERATOR "DEB")
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 set(CPACK_PACKAGE_ARCHITECTURE "amd64")
 
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "xbotinterface, matlogger2, modelinterfacerbdl")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "xbot2_interface, matlogger2")
 
 #set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ON)

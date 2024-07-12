@@ -47,8 +47,8 @@ Eigen::Affine3d fcl2Eigen(const fcl::Transform3<double> &in)
 
 // local version of vectorKDLToEigen since oldest versions are bogous.
 // To use instead of:
-// #include <eigen_conversions/eigen_kdl.h>
-// tf::vectorKDLToEigen
+// #include <tf2_eigen_kdl/tf2_eigen_kdl.hpp>
+// tf2::vectorKDLToEigen
 void vectorKDLToEigen(const KDL::Vector &k, Eigen::Matrix<double, 3, 1> &e)
 {
   for(int i = 0; i < 3; ++i)

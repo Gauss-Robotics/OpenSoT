@@ -69,27 +69,27 @@ void publishJointStates(const Eigen::VectorXd& q, const Eigen::Affine3d& start, 
     static auto joint_state_pub = n.advertise<sensor_msgs::JointState>("joint_states", 1000);
     joint_state_pub.publish(joint_msg);
 
-    static tf::TransformBroadcaster br;
-    tf::Transform transform_start, transform_goal;
-    tf::Pose pose_start, pose_goal;
-    tf::poseEigenToTF(start, pose_start);
+    static tf2::TransformBroadcaster br;
+    tf2::Transform transform_start, transform_goal;
+    tf2::Pose pose_start, pose_goal;
+    tf2::poseEigenToTF(start, pose_start);
     transform_start.setOrigin(pose_start.getOrigin());
     transform_start.setRotation(pose_start.getRotation());
-    tf::poseEigenToTF(goal, pose_goal);
+    tf2::poseEigenToTF(goal, pose_goal);
     transform_goal.setOrigin(pose_goal.getOrigin());
     transform_goal.setRotation(pose_goal.getRotation());
 
     Eigen::Affine3d floating_base;
     model->getFloatingBasePose(floating_base);
-    tf::Transform transform_floating_base;
-    tf::Pose pose_floating_base;
-    tf::poseEigenToTF(floating_base, pose_floating_base);
+    tf2::Transform transform_floating_base;
+    tf2::Pose pose_floating_base;
+    tf2::poseEigenToTF(floating_base, pose_floating_base);
     transform_floating_base.setOrigin(pose_floating_base.getOrigin());
     transform_floating_base.setRotation(pose_floating_base.getRotation());
 
-    br.sendTransform(tf::StampedTransform(transform_floating_base, joint_msg.header.stamp, "world", "base_link"));
-    br.sendTransform(tf::StampedTransform(transform_start, joint_msg.header.stamp, "world", "start"));
-    br.sendTransform(tf::StampedTransform(transform_goal, joint_msg.header.stamp, "world", "goal"));
+    br.sendTransform(tf2::StampedTransform(transform_floating_base, joint_msg.header.stamp, "world", "base_link"));
+    br.sendTransform(tf2::StampedTransform(transform_start, joint_msg.header.stamp, "world", "start"));
+    br.sendTransform(tf2::StampedTransform(transform_goal, joint_msg.header.stamp, "world", "goal"));
 }
 
 

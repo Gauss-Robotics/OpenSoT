@@ -11,7 +11,7 @@
 #include <ros/master.h>
 #include <sensor_msgs/JointState.h>
 #include <tf/transform_broadcaster.h>
-#include <eigen_conversions/eigen_kdl.h>
+#include <tf2_eigen_kdl/tf2_eigen_kdl.hpp>
 
 #include "../../common.h"
 

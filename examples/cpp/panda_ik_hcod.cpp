@@ -81,18 +81,18 @@ void publishJointStates(const Eigen::VectorXd& q, const Eigen::Affine3d& start, 
     static auto joint_state_pub = n.advertise<sensor_msgs::JointState>("joint_states", 1000);
     joint_state_pub.publish(msg);
 
-    static tf::TransformBroadcaster br;
-    tf::Transform transform_start, transform_goal;
-    tf::Pose pose_start, pose_goal;
-    tf::poseEigenToTF(start, pose_start);
+    static tf2::TransformBroadcaster br;
+    tf2::Transform transform_start, transform_goal;
+    tf2::Pose pose_start, pose_goal;
+    tf2::poseEigenToTF(start, pose_start);
     transform_start.setOrigin(pose_start.getOrigin());
     transform_start.setRotation(pose_start.getRotation());
-    tf::poseEigenToTF(goal, pose_goal);
+    tf2::poseEigenToTF(goal, pose_goal);
     transform_goal.setOrigin(pose_goal.getOrigin());
     transform_goal.setRotation(pose_goal.getRotation());
 
-    br.sendTransform(tf::StampedTransform(transform_start, msg.header.stamp, "base_link", "start"));
-    br.sendTransform(tf::StampedTransform(transform_goal, msg.header.stamp, "base_link", "goal"));
+    br.sendTransform(tf2::StampedTransform(transform_start, msg.header.stamp, "base_link", "start"));
+    br.sendTransform(tf2::StampedTransform(transform_goal, msg.header.stamp, "base_link", "goal"));
 }
 
 /**

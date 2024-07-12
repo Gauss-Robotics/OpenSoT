@@ -296,7 +296,7 @@ TEST_F(testCollisionAvoidanceConstraint, testEnvironmentCollisionAvoidance){
         cube.color.g = 1.0;
         cube.color.a = 0.5;
 
-        tf::poseEigenToMsg ( w_T_c, cube.pose );
+        tf2::poseEigenToMsg ( w_T_c, cube.pose );
 #endif
 
 

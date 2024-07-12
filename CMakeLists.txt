@@ -2,7 +2,7 @@
 # Authors: Enrico Mingo Hoffman, Alessio Rocchi
 # CopyPolicy: Released under the terms of the GNU GPL v2.0.
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 include(ExternalProject)
 project(open_sot VERSION 4.0.0)
 
@@ -26,7 +26,7 @@ add_subdirectory(doc)
 find_package(Boost COMPONENTS system REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(orocos_kdl REQUIRED)
-find_package(urdf REQUIRED)
+find_package(urdfdom REQUIRED)
 find_package(kdl_parser REQUIRED)
 find_package(moveit_core QUIET)
 
@@ -36,7 +36,7 @@ find_package(PCL 1.7 QUIET COMPONENTS   common
                                         #search
                                         #io)
                                                                                 
-find_package(eigen_conversions REQUIRED)
+find_package(tf2_eigen_kdl REQUIRED)
 find_package(xbot2_interface REQUIRED)
 find_package(PkgConfig REQUIRED)
 find_package(matlogger2 REQUIRED)
@@ -66,7 +66,7 @@ endif()
 
 # add include directories
 INCLUDE_DIRECTORIES(include ${EIGEN3_INCLUDE_DIR}
-    ${PCL_INCLUDE_DIRS} ${XBotInterface_INCLUDE_DIRS} ${eigen_conversions_INCLUDE_DIRS}
+    ${PCL_INCLUDE_DIRS} ${XBotInterface_INCLUDE_DIRS} ${tf2_eigen_kdl_INCLUDE_DIRS}
     )
 
 ADD_DEFINITIONS(${PCL_DEFINITIONS})
@@ -153,7 +153,7 @@ set(OPENSOT_SOLVERS_SOURCES src/solvers/BackEnd.cpp
     src/solvers/eHQP.cpp
     src/solvers/l1HQP.cpp)
 
-option(OPENSOT_SOTH_FRONT_END "Add to compilation soth and HCOD front-end" OFF)
+option(OPENSOT_SOTH_FRONT_END "Add to compilation soth and HCOD front-end" ON)
 if(${OPENSOT_SOTH_FRONT_END})
     message("Internal soth will be used!")
     add_subdirectory(external/soth-ext/)
@@ -189,7 +189,7 @@ ADD_LIBRARY(OpenSoT SHARED
     ${OPENSOT_VARIABLES_SOURCES}
     ${sot_INCLUDES})
 
-set(PRIVATE_TLL ${PRIVATE_TLL} ${eigen_conversions_LIBRARIES})
+set(PRIVATE_TLL ${PRIVATE_TLL} tf2_eigen_kdl::tf2_eigen_kdl)
 if(${OPENSOT_COMPILE_COLLISION})
     target_link_libraries(OpenSoT PUBLIC xbot2_interface::collision)
 endif()
@@ -312,7 +312,7 @@ install(DIRECTORY include/
     DESTINATION include
     FILES_MATCHING PATTERN "*.h")
 
-include(AddUninstallTarget)
+#include(AddUninstallTarget)
 include(MacroInstallLib)
 
 library_install(OpenSoT

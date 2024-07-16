@@ -58,15 +58,25 @@ void pyVelocityCartesian(py::module& m) {
           .def_property_readonly("baseLinkIsWorld", &Cartesian::baseLinkIsWorld);
 }
 
+// I'm not sure why do I have to do this shit
+Eigen::MatrixXd getCartesianCompliance(CartesianAdmittance& cartesian_admittance) {
+    Eigen::MatrixXd cartesian_compliance = cartesian_admittance.getCartesianCompliance();
+    return cartesian_compliance;
+}
+
+
+
 void pyVelocityCartesianAdmittance(py::module & m) {
     py::class_<CartesianAdmittance, std::shared_ptr<CartesianAdmittance>, Cartesian>(m, "CartesianAdmittance")
           .def(py::init<std::string, XBot::ModelInterface&, std::string, XBot::ForceTorqueSensor::ConstPtr>())
-//          .def("getCartesianCompliance", py::overload_cast<Eigen::Matrix6d&>(&CartesianAdmittance::getCartesianCompliance))
-//          .def("getCartesianCompliance",&CartesianAdmittance::getCartesianCompliance,py::return_value_policy::reference)
-          .def("getCartesianCompliance",&CartesianAdmittance::getCartesianCompliance)
-          .def("setWrenchReference", py::overload_cast<const Eigen::Vector6d&>(&CartesianAdmittance::setWrenchReference));
-//          .def("getWrenchReference", &CartesianAdmittance::getWrenchReference);
-
+          .def("getCartesianCompliance", getCartesianCompliance) // NOOOOO
+          .def("setWrenchReference", &CartesianAdmittance::setWrenchReference)
+          .def("setFilterDamping", &CartesianAdmittance::setFilterDamping)
+          .def("setImpedanceParams", &CartesianAdmittance::setImpedanceParams)
+          .def("setRawParams",&CartesianAdmittance::setRawParams)
+          .def("setDeadZone",&CartesianAdmittance::setDeadZone)
+          .def("computeParameters", &CartesianAdmittance::computeParameters)
+          .def("setLambda", &CartesianAdmittance::setLambda);
 }
 
 void pyVelocityAngularMomentum(py::module& m) {

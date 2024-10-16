@@ -38,8 +38,8 @@ void pyVelocityOmniWheels4X(py::module& m) {
 
 void pyVelocityCollisionAvoidance(py::module& m) {
     py::class_<CollisionAvoidance, std::shared_ptr<CollisionAvoidance>, OpenSoT::Constraint<Eigen::MatrixXd, Eigen::VectorXd>>(m, "CollisionAvoidance")
-        .def(py::init<const XBot::ModelInterface&, int, urdf::ModelConstSharedPtr, srdf::ModelConstSharedPtr>(),
-             py::arg(), py::arg("max_pairs") = -1, py::arg("collision_urdf") = nullptr, py::arg("collision_srdf") = nullptr)
+            .def(py::init<const XBot::ModelInterface&, int>(),
+                 py::arg(), py::arg("max_pairs") = -1)
         .def("getLinkPairThreshold", &CollisionAvoidance::getLinkPairThreshold)
         .def("getDetectionThreshold", &CollisionAvoidance::getDetectionThreshold)
         .def("setLinkPairThreshold", &CollisionAvoidance::setLinkPairThreshold)
@@ -58,4 +58,3 @@ void pyVelocityCollisionAvoidance(py::module& m) {
         .def("getOrderedDistanceVector", &CollisionAvoidance::getOrderedDistanceVector)
         .def("getCollisionJacobian", &CollisionAvoidance::getCollisionJacobian);
 }
-

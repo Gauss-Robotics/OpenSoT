@@ -29,6 +29,7 @@ find_package(orocos_kdl REQUIRED)
 find_package(urdfdom REQUIRED)
 find_package(kdl_parser REQUIRED)
 find_package(moveit_core QUIET)
+find_package (Python3 COMPONENTS Interpreter Development)
 
 find_package(PCL 1.7 QUIET COMPONENTS   common
                                         filters

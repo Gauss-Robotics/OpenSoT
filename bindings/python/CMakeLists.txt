@@ -39,6 +39,8 @@ if(${pybind11_FOUND})
         ARCHIVE DESTINATION "lib"
         RUNTIME DESTINATION "bin")
 
+    install(DIRECTORY pyopensot
+            DESTINATION "/usr/local/lib/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/dist-packages")
 
 else()
     message(STATUS "pybind not found")

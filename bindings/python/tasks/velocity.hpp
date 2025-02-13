@@ -69,24 +69,18 @@ void pyVelocityCartesian(py::module& m) {
 void pyVelocityCartesianAdmittance(py::module & m) {
     py::class_<CartesianAdmittance, std::shared_ptr<CartesianAdmittance>, Cartesian>(m, "CartesianAdmittance")
         .def(py::init<std::string, XBot::ModelInterface&, std::string, XBot::ForceTorqueSensor::ConstPtr>())
-        .def("getCartesianCompliance",py::overload_cast<>(&CartesianAdmittance::getCartesianCompliance))
+        .def("getCartesianCompliance", py::overload_cast<>(&CartesianAdmittance::getCartesianCompliance))
         .def("setWrenchReference", py::overload_cast<const Eigen::Vector6d&>(&CartesianAdmittance::setWrenchReference))
         .def("getWrenchReference", py::overload_cast<>(&CartesianAdmittance::getWrenchReference))
         .def("setFilterDamping", &CartesianAdmittance::setFilterDamping)
         .def("setImpedanceParams", &CartesianAdmittance::setImpedanceParams)
-        .def("setRawParams",&CartesianAdmittance::setRawParams)
-        .def("setDeadZone",&CartesianAdmittance::setDeadZone)
+        .def("setRawParams", &CartesianAdmittance::setRawParams)
+        .def("setDeadZone", &CartesianAdmittance::setDeadZone)
         .def("computeParameters", &CartesianAdmittance::computeParameters)
-        .def("setLambda", &CartesianAdmittance::setLambda);
-    
-//    py::class_<CartesianAdmittance, std::shared_ptr<CartesianAdmittance>, Cartesian>(m, "CartesianAdmittance")
-//          .def(py::init<std::string, XBot::ModelInterface&, std::string, XBot::ForceTorqueSensor::ConstPtr>())
-////          .def("getCartesianCompliance", py::overload_cast<Eigen::Matrix6d&>(&CartesianAdmittance::getCartesianCompliance))
-////          .def("getCartesianCompliance",&CartesianAdmittance::getCartesianCompliance,py::return_value_policy::reference)
-//          .def("getCartesianCompliance",&CartesianAdmittance::getCartesianCompliance)
-//          .def("setWrenchReference", py::overload_cast<const Eigen::Vector6d&>(&CartesianAdmittance::setWrenchReference));
-////          .def("getWrenchReference", &CartesianAdmittance::getWrenchReference);
-//
+        .def("setLambda", &CartesianAdmittance::setLambda)
+        .def("getFilterOutput", &CartesianAdmittance::getFilterOutput)
+        .def("getWrenchError", &CartesianAdmittance::getWrenchError)
+        .def("getWrenchMeasured", &CartesianAdmittance::getWrenchMeasured)
 }
 
 void pyVelocityAngularMomentum(py::module& m) {

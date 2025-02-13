@@ -329,4 +329,31 @@ const Eigen::Matrix6d  OpenSoT::tasks::velocity::CartesianAdmittance::getInertia
     return _M.asDiagonal();
 }
 
+void CartesianAdmittance::setFilterCoefficients(const Eigen::Vector3d& b, const Eigen::Vector3d& a)
+{
+    if(b.size() != 3 || a.size() != 3)
+    {
+        throw std::invalid_argument("Size of coefficients must be 3.");
+    }
+
+    for(unsigned int i = 0; i < _filter.getNumberOfChannels(); ++i)
+    {
+        _filter.setCoefficients(b.data(), a.data(), i);
+    }
+}
+
+const Eigen::Vector6d& CartesianAdmittance::getFilterOutput() const
+{
+    return _wrench_filt;
+}
+
+const Eigen::Vector6d& CartesianAdmittance::getWrenchError() const
+{
+    return _wrench_error;
+}
+
+const Eigen::Vector6d& CartesianAdmittance::getWrenchMeasured() const
+{
+    return _wrench_measured;
+}
 

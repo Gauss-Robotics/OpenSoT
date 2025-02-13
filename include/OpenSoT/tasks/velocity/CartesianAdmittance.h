@@ -20,7 +20,7 @@ namespace OpenSoT {
         * and discretized according to a trapezoidal (aka Tustin) scheme. This yields
         * a difference equation of the following form:
         *
-        *      a0*y + a1*yd + a2*ydd = u + b1*ud + b2*udd
+        *      a0*y + a1*yd + a2*ydd = b0*u + b1*ud + b2*udd
         *
         * where yd = y(k-1), ydd = y(k-2) and so on (d = delayed).
         */
@@ -71,7 +71,7 @@ namespace OpenSoT {
 
 
                _u = input;
-               _y = 1.0/_a0 * ( _u + _b1*_ud + _b2*_udd - _a1*_yd - _a2*_ydd );
+               _y = 1.0/_a0 * ( _b0*_u + _b1*_ud + _b2*_udd - _a1*_yd - _a2*_ydd );
 
                return _y;
            }
@@ -110,10 +110,22 @@ namespace OpenSoT {
                return _ts;
            }
 
+           void setCoefficients(const double* b, const double* a)
+           {
+               _b0 = b[0];
+               _b1 = b[1];
+               _b2 = b[2];
+
+               _a0 = a[0];
+               _a1 = a[1];
+               _a2 = a[2];
+           }
+
        private:
 
            void computeCoeff()
            {
+               _b0 = 1.0;
                _b1 = 2.0;
                _b2 = 1.0;
 
@@ -127,7 +139,7 @@ namespace OpenSoT {
            double _eps;
            double _ts;
 
-           double _b1, _b2;
+           double _b0, _b1, _b2;
            double _a0, _a1, _a2;
 
            bool _reset_has_been_called;
@@ -409,6 +421,11 @@ namespace OpenSoT {
             */
            void setLambda(double lambda){XBot::Logger::warning("setLambda do nothing in CartesianAdmittance, use instead the setRawParams() or the setImpedanceParams()");}
 
+           void setFilterCoefficients(const Eigen::Vector3d& b, const Eigen::Vector3d& a);
+
+           const Eigen::Vector6d& getFilterOutput() const;
+           const Eigen::Vector6d& getWrenchError() const;
+           const Eigen::Vector6d& getWrenchMeasured() const;
 
          private:
              

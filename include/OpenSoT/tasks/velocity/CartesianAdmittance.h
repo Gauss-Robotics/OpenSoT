@@ -238,6 +238,13 @@ namespace OpenSoT {
                    return _filters[channel].getOmega();
            }
 
+           void setCoefficients(const double* b, const double* a, const int channel)
+           {
+               if(channel >= _channels)
+                   throw std::runtime_error("channel out of channels range!");
+               _filters[channel].setCoefficients(b, a);
+           }
+
            int getNumberOfChannels()
            {
                return _channels;

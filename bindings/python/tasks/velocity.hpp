@@ -80,7 +80,7 @@ void pyVelocityCartesianAdmittance(py::module & m) {
         .def("setLambda", &CartesianAdmittance::setLambda)
         .def("getFilterOutput", &CartesianAdmittance::getFilterOutput)
         .def("getWrenchError", &CartesianAdmittance::getWrenchError)
-        .def("getWrenchMeasured", &CartesianAdmittance::getWrenchMeasured)
+        .def("getWrenchMeasured", &CartesianAdmittance::getWrenchMeasured);
 }
 
 void pyVelocityAngularMomentum(py::module& m) {

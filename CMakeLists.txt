@@ -36,7 +36,6 @@ find_package(PCL 1.7 QUIET COMPONENTS   common
                                         #search
                                         #io)
                                                                                 
-find_package(tf2_eigen_kdl REQUIRED)
 find_package(xbot2_interface REQUIRED)
 find_package(PkgConfig REQUIRED)
 find_package(matlogger2 REQUIRED)
@@ -119,13 +118,13 @@ set(OPENSOT_TASKS_SOURCES src/tasks/Aggregated.cpp
     src/tasks/MinimizeVariable.cpp
     src/tasks/GenericTask.cpp
     src/tasks/GenericLPTask.cpp
-    src/tasks/acceleration/Postural.cpp
-    src/tasks/acceleration/Cartesian.cpp
-    src/tasks/acceleration/Contact.cpp
-    src/tasks/acceleration/CoM.cpp
-    src/tasks/acceleration/DynamicFeasibility.cpp
-    src/tasks/acceleration/MinJointVel.cpp
-    src/tasks/acceleration/AngularMomentum.cpp
+    #src/tasks/acceleration/Postural.cpp
+    #src/tasks/acceleration/Cartesian.cpp
+    #src/tasks/acceleration/Contact.cpp
+    #src/tasks/acceleration/CoM.cpp
+    #src/tasks/acceleration/DynamicFeasibility.cpp
+    #src/tasks/acceleration/MinJointVel.cpp
+    #src/tasks/acceleration/AngularMomentum.cpp
     src/tasks/velocity/Cartesian.cpp
     src/tasks/velocity/CartesianAdmittance.cpp #TODO: refactor to better implementation of admittance, not using filters
     src/tasks/velocity/PureRolling.cpp
@@ -138,12 +137,12 @@ set(OPENSOT_TASKS_SOURCES src/tasks/Aggregated.cpp
     src/tasks/velocity/MinimumEffort.cpp
     src/tasks/velocity/Postural.cpp
     src/tasks/velocity/JointAdmittance.cpp #TODO: refactor to better implementation of admittance, not using filters
-    src/tasks/force/CoM.cpp
-    src/tasks/force/FloatingBase.cpp
-    src/tasks/force/Force.cpp
-    src/tasks/force/Cartesian.cpp
-    src/tasks/floating_base/Contact.cpp
-    src/tasks/floating_base/IMU.cpp
+    #src/tasks/force/CoM.cpp
+    #src/tasks/force/FloatingBase.cpp
+    #src/tasks/force/Force.cpp
+    #src/tasks/force/Cartesian.cpp
+    #src/tasks/floating_base/Contact.cpp
+    #src/tasks/floating_base/IMU.cpp
     )
 ##SOLVERS
 set(OPENSOT_SOLVERS_SOURCES src/solvers/BackEnd.cpp
@@ -169,7 +168,7 @@ set(OPENSOT_UTILS_SOURCES src/utils/AutoStack.cpp
     src/utils/Affine.cpp
     src/utils/AffineUtils.cpp
     src/utils/Indices.cpp
-    src/utils/cartesian_utils.cpp
+   # src/utils/cartesian_utils.cpp
     src/utils/InverseDynamics.cpp)
 
 if(${PCL_FOUND})
@@ -189,7 +188,6 @@ ADD_LIBRARY(OpenSoT SHARED
     ${OPENSOT_VARIABLES_SOURCES}
     ${sot_INCLUDES})
 
-set(PRIVATE_TLL ${PRIVATE_TLL} tf2_eigen_kdl::tf2_eigen_kdl)
 if(${OPENSOT_COMPILE_COLLISION})
     target_link_libraries(OpenSoT PUBLIC xbot2_interface::collision)
 endif()

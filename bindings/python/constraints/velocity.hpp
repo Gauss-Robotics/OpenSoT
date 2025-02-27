@@ -4,8 +4,6 @@
 #include <OpenSoT/constraints/velocity/JointLimits.h>
 #include <OpenSoT/constraints/velocity/VelocityLimits.h>
 #include <OpenSoT/constraints/velocity/OmniWheels4X.h>
-#include <OpenSoT/constraints/velocity/CollisionAvoidance.h>
-
 
 namespace py = pybind11;
 using namespace OpenSoT::constraints::velocity;

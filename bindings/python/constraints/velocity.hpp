@@ -3,6 +3,7 @@
 #include <pybind11/stl.h>
 #include <OpenSoT/constraints/velocity/JointLimits.h>
 #include <OpenSoT/constraints/velocity/VelocityLimits.h>
+#include <OpenSoT/constraints/velocity/AccelerationLimits.h>
 #include <OpenSoT/constraints/velocity/OmniWheels4X.h>
 
 namespace py = pybind11;
@@ -25,6 +26,15 @@ void pyVelocityLimits(py::module& m) {
         .def("setVelocityLimits", py::overload_cast<const Eigen::VectorXd&>(&VelocityLimits::setVelocityLimits))
         .def("getDT", &VelocityLimits::getDT)
         .def("update", &VelocityLimits::update);
+}
+
+void pyVelocityAccelerationLimits(py::module& m) {
+    py::class_<AccelerationLimits, std::shared_ptr<AccelerationLimits>, OpenSoT::Constraint<Eigen::MatrixXd, Eigen::VectorXd>>(m, "AccelerationLimits")
+        .def(py::init<const XBot::ModelInterface&, const Eigen::VectorXd&, const double>())
+        .def("getAccelerationLimits", &AccelerationLimits::getAccelerationLimits)
+        .def("setAccelerationLimits", py::overload_cast<const Eigen::VectorXd&>(&AccelerationLimits::setAccelerationLimits))
+        .def("getDT", &AccelerationLimits::getDT)
+        .def("setBoundScaling", &AccelerationLimits::setBoundScaling);
 }
 
 void pyVelocityOmniWheels4X(py::module& m) {

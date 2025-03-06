@@ -14,11 +14,11 @@
              */
             class AccelerationLimits: public Constraint<Eigen::MatrixXd, Eigen::VectorXd> {
             public:
-                typedef std::shared_ptr<VelocityLimits> Ptr;
+                typedef std::shared_ptr<AccelerationLimits> Ptr;
             private:
                 const XBot::ModelInterface& _robot;
                 double _boundScaling;
-                double _qDDotLimit;
+                Eigen::VectorXd _qDDotLimit;
                 double _dT;
                 Eigen::VectorXd _v;
 

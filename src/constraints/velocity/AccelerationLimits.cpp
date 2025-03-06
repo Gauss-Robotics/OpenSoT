@@ -1,11 +1,11 @@
-#include <OpenSoT/constraints/velocity/Acceleration_limits.h>
+#include <OpenSoT/constraints/velocity/AccelerationLimits.h>
 
 using namespace OpenSoT::constraints::velocity;
 
 AccelerationLimits::AccelerationLimits(const XBot::ModelInterface& robot,
                                         const Eigen::VectorXd& qDDotLimit,
                                         const double dT,
-                                        const double boundScaling) :
+                                        const double boundScaling):
     Constraint("acceleration_limits", robot.getNv()),
     _robot(robot),
     _qDDotLimit(qDDotLimit),
@@ -23,7 +23,7 @@ AccelerationLimits::AccelerationLimits(const XBot::ModelInterface& robot,
     this->update();
 }
 
-void JointLimits::update()
+void AccelerationLimits::update()
 {
     _v = _robot.getJointVelocity();
 
@@ -32,39 +32,35 @@ void JointLimits::update()
     for(unsigned int i = 0; i < _qDDotLimit.size(); ++i)
     {
         // _lowerBound[i] = (-1.0*std::fabs(_qDDotLimit[i])*_dT*_dT + _v*_dT)*_boundScaling; // assume optimized velocity is in m/timestep
-        _lowerBound[i] = (-1.0*std::fabs(_qDDotLimit[i])*_dT + _v*)*_boundScaling; // assume optimized velocity is in m/s
+        _lowerBound[i] = (-1.0*std::fabs(_qDDotLimit[i])*_dT + _v[i])*_boundScaling; // assume optimized velocity is in m/s
         // _upperBound[i] = (1.0*std::fabs(_qDDotLimit[i])*_dT*_dT + _v*_dT)*_boundScaling;
-        _upperBound[i] = (1.0*std::fabs(_qDDotLimit[i])*_dT + _v)*_boundScaling;
+        _upperBound[i] = (1.0*std::fabs(_qDDotLimit[i])*_dT + _v[i])*_boundScaling;
 
-        // avoid infeasibility
-        _upperBound[i] = _upperBound[i].cwiseMax(0.0);
-        _lowerBound[i] = _lowerBound[i].cwiseMin(0.0);
     }
+    // avoid infeasibility
+    _upperBound = _upperBound.cwiseMax(Eigen::VectorXd::Zero(_x_size));
+    _lowerBound = _lowerBound.cwiseMin(Eigen::VectorXd::Zero(_x_size));
 /**********************************************************************/
 
 }
 
-void JointLimits::setBoundScaling(const double boundScaling)
-{
-    _boundScaling = boundScaling;
-}
-
-double OpenSoT::constraints::velocity::AccelerationLimits::getDT()
+double AccelerationLimits::getDT()
 {
     return _dT;
 }
 
-Eigen::VectorXd OpenSoT::constraints::velocity::AccelerationLimits::getAccelerationLimits()
+Eigen::VectorXd AccelerationLimits::getAccelerationLimits()
 {
     return _upperBound/_dT;
 }
 
-void OpenSoT::constraints::velocity::AccelerationLimits::setAccelerationLimits(const Eigen::VectorXd& qDotLimit)
+void AccelerationLimits::setAccelerationLimits(const Eigen::VectorXd& qDotLimit)
 {
-    this->generateBounds(qDotLimit);
+    _qDDotLimit = qDotLimit;
+    this->update();
 }
 
-void JointLimits::setBoundScaling(const double boundScaling)
+void AccelerationLimits::setBoundScaling(const double boundScaling)
 {
     _boundScaling = boundScaling;
 }

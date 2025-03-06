@@ -52,9 +52,7 @@
                  */
                 double getDT();
                 void setBoundScaling(const double boundScaling);
-
-            private:
-                void generateBounds(const Eigen::VectorXd& qDDotLimit);
+                void update();
             };
         }
     }

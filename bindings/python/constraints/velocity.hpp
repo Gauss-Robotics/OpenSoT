@@ -30,11 +30,12 @@ void pyVelocityLimits(py::module& m) {
 
 void pyVelocityAccelerationLimits(py::module& m) {
     py::class_<AccelerationLimits, std::shared_ptr<AccelerationLimits>, OpenSoT::Constraint<Eigen::MatrixXd, Eigen::VectorXd>>(m, "AccelerationLimits")
-        .def(py::init<const XBot::ModelInterface&, const Eigen::VectorXd&, const double>())
+        .def(py::init<const XBot::ModelInterface&, const Eigen::VectorXd&, const double, const double>())
         .def("getAccelerationLimits", &AccelerationLimits::getAccelerationLimits)
         .def("setAccelerationLimits", py::overload_cast<const Eigen::VectorXd&>(&AccelerationLimits::setAccelerationLimits))
         .def("getDT", &AccelerationLimits::getDT)
-        .def("setBoundScaling", &AccelerationLimits::setBoundScaling);
+        .def("setBoundScaling", &AccelerationLimits::setBoundScaling)
+        .def("update", &VelocityLimits::update);
 }
 
 void pyVelocityOmniWheels4X(py::module& m) {

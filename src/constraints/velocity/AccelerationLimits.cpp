@@ -20,23 +20,25 @@ AccelerationLimits::AccelerationLimits(const XBot::ModelInterface& robot,
 
     this->setAccelerationLimits(qDDotLimit);
 
-    this->generateBounds(qDDotLimit);
+    this->update();
 }
 
-void JointLimits::generateBounds(const Eigen::VectorXd& qDDotLimit)
+void JointLimits::update()
 {
     _v = _robot.getJointVelocity();
 
 /************************ COMPUTING BOUNDS ****************************/
-    assert(qDDotLimit.size() == _x_size);
-    for(unsigned int i = 0; i < qDDotLimit.size(); ++i)
+    assert(_qDDotLimit.size() == _x_size);
+    for(unsigned int i = 0; i < _qDDotLimit.size(); ++i)
     {
-        _lowerBound[i] = (-1.0*std::fabs(qDDotLimit[i])*_dT*_dT + _v*_dT)*_boundScaling;
-        _upperBound[i] = (1.0*std::fabs(qDDotLimit[i])*_dT*_dT + _v*_dT)*_boundScaling;
+        // _lowerBound[i] = (-1.0*std::fabs(_qDDotLimit[i])*_dT*_dT + _v*_dT)*_boundScaling; // assume optimized velocity is in m/timestep
+        _lowerBound[i] = (-1.0*std::fabs(_qDDotLimit[i])*_dT + _v*)*_boundScaling; // assume optimized velocity is in m/s
+        // _upperBound[i] = (1.0*std::fabs(_qDDotLimit[i])*_dT*_dT + _v*_dT)*_boundScaling;
+        _upperBound[i] = (1.0*std::fabs(_qDDotLimit[i])*_dT + _v)*_boundScaling;
 
         // avoid infeasibility
         _upperBound[i] = _upperBound[i].cwiseMax(0.0);
-        _lowerBound[i] = _lowerBound[i].cwiseMin(0.0);    
+        _lowerBound[i] = _lowerBound[i].cwiseMin(0.0);
     }
 /**********************************************************************/
 

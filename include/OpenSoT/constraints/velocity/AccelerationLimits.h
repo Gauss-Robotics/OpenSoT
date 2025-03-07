@@ -20,7 +20,7 @@
                 double _boundScaling;
                 Eigen::VectorXd _qDDotLimit;
                 double _dT;
-                Eigen::VectorXd _v;
+                Eigen::VectorXd _v; // joint velocity
 
             public:
                 /**

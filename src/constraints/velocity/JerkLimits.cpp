@@ -1,4 +1,4 @@
-#include <OpenSoT/constraints/velocity/AccelerationLimits.h>
+#include <OpenSoT/constraints/velocity/JerkLimits.h>
 #include <fstream>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -7,27 +7,27 @@
 
 using namespace OpenSoT::constraints::velocity;
 
-AccelerationLimits::AccelerationLimits(const XBot::ModelInterface& robot,
-                                        const Eigen::VectorXd& qDDotLimit,
+JerkLimits::JerkLimits(const XBot::ModelInterface& robot,
+                                        const Eigen::VectorXd& qDDDotLimit,
                                         const double dT,
                                         const double boundScaling):
-    Constraint("acceleration_limits", robot.getNv()),
+    Constraint("jerk_limits", robot.getNv()),
     _robot(robot),
-    _qDDotLimit(qDDotLimit),
+    _qDDDotLimit(qDDDotLimit),
     _dT(dT),
     _boundScaling(boundScaling) {
 
-    if(qDDotLimit.size() != _x_size)
-        throw std::runtime_error("qDDotLimit.size() != _x_size()");
+    if(qDDDotLimit.size() != _x_size)
+        throw std::runtime_error("qDDDotLimit.size() != _x_size()");
 
     _lowerBound.setZero(_x_size);
     _upperBound.setZero(_x_size);
 
     // Create the CSV file
     const std::string dir = "/root/ros2_ws/src/out_OpenSoT/logs";
-    _outFile.open(dir + "/acceleration_limits.csv");
+    _outFile.open(dir + "/jerk_limits.csv");
     if (!_outFile.is_open()) {
-        throw std::runtime_error("Failed to create file: " + dir + "/acceleration_limits.csv");
+        throw std::runtime_error("Failed to create file: " + dir + "/jerk_limits.csv");
     }
 
     // Write the header
@@ -46,59 +46,60 @@ AccelerationLimits::AccelerationLimits(const XBot::ModelInterface& robot,
     this->update();
 }
 
-AccelerationLimits::~AccelerationLimits() {
+JerkLimits::~JerkLimits() {
     if (_outFile.is_open()) {
         _outFile.close();
     }
 }
 
-void AccelerationLimits::update()
+void JerkLimits::update()
 {
     _v = _robot.getJointVelocity();
+    _a = _robot.getJointAcceleration();
     /************************ COMPUTING BOUNDS ****************************/
-    assert(_qDDotLimit.size() == _x_size);
-    for(unsigned int i = 0; i < _qDDotLimit.size(); ++i)
+    assert(_qDDDotLimit.size() == _x_size);
+    for(unsigned int i = 0; i < _qDDDotLimit.size(); ++i)
     {
-        _lowerBound[i] = (-1.0*std::fabs(_qDDotLimit[i])*_dT + _v[i]); // assume optimized velocity is in rad/timestep
-        _upperBound[i] = (1.0*std::fabs(_qDDotLimit[i])*_dT + _v[i]);
+        _lowerBound[i] = (-1.0*std::fabs(_qDDDotLimit[i])*_dT*_dT + _a[i]*_dT + _v[i]); // assume optimized velocity is in rad/timestep
+        _upperBound[i] = (1.0*std::fabs(_qDDDotLimit[i])*_dT*_dT + _a[i]*_dT + _v[i]);
 
     }
     /**********************************************************************/
-    for(unsigned int i = 0; i < _qDDotLimit.size(); ++i)
+    for(unsigned int i = 0; i < _qDDDotLimit.size(); ++i)
     {
         _outFile << _v[i];
-        if (i < _qDDotLimit.size() - 1) {
+        if (i < _qDDDotLimit.size() - 1) {
             _outFile << ",";
         }
     }
-    for(unsigned int i = 0; i < _qDDotLimit.size(); ++i)
+    for(unsigned int i = 0; i < _qDDDotLimit.size(); ++i)
     {
         _outFile << "," << _lowerBound[i];
     }
-    for(unsigned int i = 0; i < _qDDotLimit.size(); ++i)
+    for(unsigned int i = 0; i < _qDDDotLimit.size(); ++i)
     {
         _outFile << "," << _upperBound[i];
     }
     _outFile << "\n";
 }
 
-double AccelerationLimits::getDT()
+double JerkLimits::getDT()
 {
     return _dT;
 }
 
-Eigen::VectorXd AccelerationLimits::getAccelerationLimits()
+Eigen::VectorXd JerkLimits::getJerkLimits()
 {
-    return _upperBound/_dT;
+    return _upperBound/(_dT*_dT);
 }
 
-void AccelerationLimits::setAccelerationLimits(const Eigen::VectorXd& qDotLimit)
+void JerkLimits::setJerkLimits(const Eigen::VectorXd& qDotLimit)
 {
-    this->_qDDotLimit = qDotLimit;
+    this->_qDDDotLimit = qDotLimit;
     this->update();
 }
 
-void AccelerationLimits::setBoundScaling(const double boundScaling)
+void JerkLimits::setBoundScaling(const double boundScaling)
 {
     this->_boundScaling = boundScaling;
 }

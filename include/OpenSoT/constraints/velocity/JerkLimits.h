@@ -1,5 +1,5 @@
-#ifndef __BOUNDS_VELOCITY_ACCELERATIONLIMITS_H__
-#define __BOUNDS_VELOCITY_ACCELERATIONLIMITS_H__
+#ifndef __BOUNDS_VELOCITY_JERKLIMITS_H__
+#define __BOUNDS_VELOCITY_JERKLIMITS_H__
 
 #include <OpenSoT/Constraint.h>
 #include <Eigen/Dense>
@@ -10,27 +10,28 @@ namespace OpenSoT {
     namespace constraints {
         namespace velocity {
             /**
-             * @brief The AccelerationLimits class implements a bound on joint accelerations
+             * @brief The JerkLimits class implements a bound on joint jerks
              */
-            class AccelerationLimits: public Constraint<Eigen::MatrixXd, Eigen::VectorXd> {
+            class JerkLimits: public Constraint<Eigen::MatrixXd, Eigen::VectorXd> {
             public:
-                typedef std::shared_ptr<AccelerationLimits> Ptr;
+                typedef std::shared_ptr<JerkLimits> Ptr;
             private:
                 const XBot::ModelInterface& _robot;
                 double _boundScaling;
-                Eigen::VectorXd _qDDotLimit;
+                Eigen::VectorXd _qDDDotLimit;
                 double _dT;
                 Eigen::VectorXd _v; // joint velocity
+                Eigen::VectorXd _a; // joint acceleration
                 std::ofstream _outFile; // file stream for logging
 
             public:
                 /**
-                 * @brief AccelerationLimits constructor
-                 * @param qDDotLimit the joint acceleration limit. It is always a positive number [rad/s^2]
+                 * @brief JerkLimits constructor
+                 * @param qDDotLimit the joint jerk limit. It is always a positive number [rad/s^2]
                  * @param dT the time constant at which we are performing velocity control [s]
                  * @param x_size the size of the unknowns that we want to bound (it CANNOT be a subset)
                  */
-                AccelerationLimits(const XBot::ModelInterface& robot,
+                JerkLimits(const XBot::ModelInterface& robot,
                                const Eigen::VectorXd& qDDotLimit,
                                const double dT, 
                                const double boundScaling = 1.0);
@@ -38,19 +39,19 @@ namespace OpenSoT {
                 /**
                  * @brief Destructor to close the file stream
                  */
-                ~AccelerationLimits();
+                ~JerkLimits();
 
                 /**
-                 * @brief getAccelerationLimits returns the current acceleration limits.
-                 * @return the joint acceleration limits. It is always a positive double [rad/s^2]
+                 * @brief getJerkLimits returns the current jerk limits.
+                 * @return the joint jerk limits. It is always a positive double [rad/s^2]
                  */
-                Eigen::VectorXd getAccelerationLimits();
+                Eigen::VectorXd getJerkLimits();
 
                 /**
-                 * @brief setAccelerationLimits
-                 * @param qDDotLimit the joint acceleration limits. It needs be a positive number [rad/s^2]
+                 * @brief setJerkLimits
+                 * @param qDDotLimit the joint jerk limits. It needs be a positive number [rad/s^2]
                  */
-                void setAccelerationLimits(const Eigen::VectorXd& qDDotLimit);
+                void setJerkLimits(const Eigen::VectorXd& qDDotLimit);
 
                 /**
                  * @brief getDT returns the (constant) sample time we assume on the system.

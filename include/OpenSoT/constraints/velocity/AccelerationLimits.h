@@ -21,7 +21,7 @@ namespace OpenSoT {
                 Eigen::VectorXd _qDDotLimit;
                 double _dT;
                 Eigen::VectorXd _v; // joint velocity
-                std::ofstream _outFile; // file stream for logging
+                // std::ofstream _outFile; // file stream for logging
 
             public:
                 /**
@@ -35,10 +35,10 @@ namespace OpenSoT {
                                const double dT, 
                                const double boundScaling = 1.0);
 
-                /**
-                 * @brief Destructor to close the file stream
-                 */
-                ~AccelerationLimits();
+                // /**
+                //  * @brief Destructor to close the file stream
+                //  */
+                // ~AccelerationLimits();
 
                 /**
                  * @brief getAccelerationLimits returns the current acceleration limits.

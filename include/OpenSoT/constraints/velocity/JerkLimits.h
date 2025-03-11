@@ -22,7 +22,7 @@ namespace OpenSoT {
                 double _dT;
                 Eigen::VectorXd _v; // joint velocity
                 Eigen::VectorXd _a; // joint acceleration
-                std::ofstream _outFile; // file stream for logging
+                // std::ofstream _outFile; // file stream for logging
 
             public:
                 /**
@@ -36,10 +36,10 @@ namespace OpenSoT {
                                const double dT, 
                                const double boundScaling = 1.0);
 
-                /**
-                 * @brief Destructor to close the file stream
-                 */
-                ~JerkLimits();
+                // /**
+                //  * @brief Destructor to close the file stream
+                //  */
+                // ~JerkLimits();
 
                 /**
                  * @brief getJerkLimits returns the current jerk limits.

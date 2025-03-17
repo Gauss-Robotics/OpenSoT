@@ -5,17 +5,22 @@
 #include <Eigen/Dense>
 #include <xbot2_interface/xbotinterface2.h>
 
-namespace OpenSoT {
-    namespace constraints {
-        namespace velocity {
+namespace OpenSoT
+{
+    namespace constraints
+    {
+        namespace velocity
+        {
             /**
              * @brief The JerkLimits class implements a bound on joint jerks
              */
-            class JerkLimits: public Constraint<Eigen::MatrixXd, Eigen::VectorXd> {
+            class JerkLimits : public Constraint<Eigen::MatrixXd, Eigen::VectorXd>
+            {
             public:
                 typedef std::shared_ptr<JerkLimits> Ptr;
+
             private:
-                const XBot::ModelInterface& _robot;
+                const XBot::ModelInterface &_robot;
                 double _boundScaling;
                 Eigen::VectorXd _qDDDotLimit;
                 double _dT;
@@ -29,11 +34,10 @@ namespace OpenSoT {
                  * @param dT the time constant at which we are performing velocity control [s]
                  * @param x_size the size of the unknowns that we want to bound (it CANNOT be a subset)
                  */
-                JerkLimits(const XBot::ModelInterface& robot,
-                               const Eigen::VectorXd& qDDotLimit,
-                               const double dT, 
-                               const double boundScaling = 1.0);
-
+                JerkLimits(const XBot::ModelInterface &robot,
+                           const Eigen::VectorXd &qDDotLimit,
+                           const double dT,
+                           const double boundScaling = 1.0);
 
                 /**
                  * @brief getJerkLimits returns the current jerk limits.
@@ -45,7 +49,7 @@ namespace OpenSoT {
                  * @brief setJerkLimits
                  * @param qDDotLimit the joint jerk limits. It needs be a positive number [rad/s^2]
                  */
-                void setJerkLimits(const Eigen::VectorXd& qDDotLimit);
+                void setJerkLimits(const Eigen::VectorXd &qDDotLimit);
 
                 /**
                  * @brief getDT returns the (constant) sample time we assume on the system.
@@ -57,6 +61,6 @@ namespace OpenSoT {
             };
         }
     }
- }
+}
 
 #endif

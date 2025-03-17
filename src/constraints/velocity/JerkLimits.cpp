@@ -1,20 +1,16 @@
 #include <OpenSoT/constraints/velocity/JerkLimits.h>
 #include <fstream>
+#include <sstream>
+#include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <string>
-#include <sstream>
 
 using namespace OpenSoT::constraints::velocity;
 
-JerkLimits::JerkLimits(const XBot::ModelInterface &robot,
-                       const Eigen::VectorXd &qDDDotLimit,
-                       const double dT,
-                       const double boundScaling) : Constraint("jerk_limits", robot.getNv()),
-                                                    _robot(robot),
-                                                    _qDDDotLimit(qDDDotLimit),
-                                                    _dT(dT),
-                                                    _boundScaling(boundScaling)
+JerkLimits::JerkLimits(const XBot::ModelInterface &robot, const Eigen::VectorXd &qDDDotLimit, const double dT,
+                       const double boundScaling)
+    : Constraint("jerk_limits", robot.getNv()), _robot(robot), _qDDDotLimit(qDDDotLimit), _dT(dT),
+      _boundScaling(boundScaling)
 {
 
     if (qDDDotLimit.size() != _x_size)

@@ -1,20 +1,16 @@
 #include <OpenSoT/constraints/velocity/AccelerationLimits.h>
 #include <fstream>
+#include <sstream>
+#include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <string>
-#include <sstream>
 
 using namespace OpenSoT::constraints::velocity;
 
-AccelerationLimits::AccelerationLimits(const XBot::ModelInterface &robot,
-                                       const Eigen::VectorXd &qDDotLimit,
-                                       const double dT,
-                                       const double boundScaling) : Constraint("acceleration_limits", robot.getNv()),
-                                                                    _robot(robot),
-                                                                    _qDDotLimit(qDDotLimit),
-                                                                    _dT(dT),
-                                                                    _boundScaling(boundScaling)
+AccelerationLimits::AccelerationLimits(const XBot::ModelInterface &robot, const Eigen::VectorXd &qDDotLimit,
+                                       const double dT, const double boundScaling)
+    : Constraint("acceleration_limits", robot.getNv()), _robot(robot), _qDDotLimit(qDDotLimit), _dT(dT),
+      _boundScaling(boundScaling)
 {
 
     if (qDDotLimit.size() != _x_size)

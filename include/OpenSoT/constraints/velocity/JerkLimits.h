@@ -30,7 +30,7 @@ class JerkLimits : public Constraint<Eigen::MatrixXd, Eigen::VectorXd>
   public:
     /**
      * @brief JerkLimits constructor
-     * @param qDDotLimit the joint jerk limit. It is always a positive number [rad/s^2]
+     * @param qDDotLimit the joint jerk limit. It is always a positive number [rad/s^3]
      * @param dT the time constant at which we are performing velocity control [s]
      * @param x_size the size of the unknowns that we want to bound (it CANNOT be a subset)
      */
@@ -39,13 +39,13 @@ class JerkLimits : public Constraint<Eigen::MatrixXd, Eigen::VectorXd>
 
     /**
      * @brief getJerkLimits returns the current jerk limits.
-     * @return the joint jerk limits. It is always a positive double [rad/s^2]
+     * @return the joint jerk limits. It is always a positive double [rad/s^3]
      */
     Eigen::VectorXd getJerkLimits();
 
     /**
      * @brief setJerkLimits
-     * @param qDDotLimit the joint jerk limits. It needs be a positive number [rad/s^2]
+     * @param qDDotLimit the joint jerk limits. It needs be a positive number [rad/s^3]
      */
     void setJerkLimits(const Eigen::VectorXd &qDDotLimit);
 

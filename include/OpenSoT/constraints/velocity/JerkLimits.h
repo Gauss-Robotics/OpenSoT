@@ -30,11 +30,11 @@ class JerkLimits : public Constraint<Eigen::MatrixXd, Eigen::VectorXd>
   public:
     /**
      * @brief JerkLimits constructor
-     * @param qDDotLimit the joint jerk limit. It is always a positive number [rad/s^3]
+     * @param qDDDotLimit the joint jerk limit. It is always a positive number [rad/s^3]
      * @param dT the time constant at which we are performing velocity control [s]
      * @param x_size the size of the unknowns that we want to bound (it CANNOT be a subset)
      */
-    JerkLimits(const XBot::ModelInterface &robot, const Eigen::VectorXd &qDDotLimit, const double dT,
+    JerkLimits(const XBot::ModelInterface &robot, const Eigen::VectorXd &qDDDotLimit, const double dT,
                const double boundScaling = 1.0);
 
     /**
@@ -45,9 +45,9 @@ class JerkLimits : public Constraint<Eigen::MatrixXd, Eigen::VectorXd>
 
     /**
      * @brief setJerkLimits
-     * @param qDDotLimit the joint jerk limits. It needs be a positive number [rad/s^3]
+     * @param qDDDotLimit the joint jerk limits. It needs be a positive number [rad/s^3]
      */
-    void setJerkLimits(const Eigen::VectorXd &qDDotLimit);
+    void setJerkLimits(const Eigen::VectorXd &qDDDotLimit);
 
     /**
      * @brief getDT returns the (constant) sample time we assume on the system.

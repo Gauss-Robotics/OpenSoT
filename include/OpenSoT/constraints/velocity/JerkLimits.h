@@ -4,7 +4,6 @@
 #include <OpenSoT/Constraint.h>
 #include <Eigen/Dense>
 #include <xbot2_interface/xbotinterface2.h>
-#include <fstream>
 
 namespace OpenSoT {
     namespace constraints {
@@ -20,9 +19,8 @@ namespace OpenSoT {
                 double _boundScaling;
                 Eigen::VectorXd _qDDDotLimit;
                 double _dT;
-                Eigen::VectorXd _v; // joint velocity
-                Eigen::VectorXd _a; // joint acceleration
-                // std::ofstream _outFile; // file stream for logging
+                Eigen::VectorXd _v; // joint velocities
+                Eigen::VectorXd _a; // joint accelerations
 
             public:
                 /**
@@ -36,10 +34,6 @@ namespace OpenSoT {
                                const double dT, 
                                const double boundScaling = 1.0);
 
-                // /**
-                //  * @brief Destructor to close the file stream
-                //  */
-                // ~JerkLimits();
 
                 /**
                  * @brief getJerkLimits returns the current jerk limits.

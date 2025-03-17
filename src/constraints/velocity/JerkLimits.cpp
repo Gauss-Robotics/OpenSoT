@@ -23,71 +23,25 @@ JerkLimits::JerkLimits(const XBot::ModelInterface& robot,
     _lowerBound.setZero(_x_size);
     _upperBound.setZero(_x_size);
 
-    // // Create the CSV file
-    // const std::string dir = "/root/ros2_ws/src/out_OpenSoT/logs";
-    // _outFile.open(dir + "/jerk_limits.csv");
-    // if (!_outFile.is_open()) {
-    //     throw std::runtime_error("Failed to create file: " + dir + "/jerk_limits.csv");
-    // }
-
-    // // Write the header
-    // _outFile << "v_0";
-    // for (unsigned int i = 1; i < _x_size; ++i) {
-    //     _outFile << ",v_" << i;
-    // }
-    // for (unsigned int i = 0; i < _x_size; ++i) {
-    //     _outFile << ",a_" << i;
-    // }
-    // for (unsigned int i = 0; i < _x_size; ++i) {
-    //     _outFile << ",lowerBound_" << i;
-    // }
-    // for (unsigned int i = 0; i < _x_size; ++i) {
-    //     _outFile << ",upperBound_" << i;
-    // }
-    // _outFile << "\n";
-
     this->update();
 }
 
-// JerkLimits::~JerkLimits() {
-//     if (_outFile.is_open()) {
-//         _outFile.close();
-//     }
-// }
 
 void JerkLimits::update()
 {
+    // the joint velocity and acceleration are obtained from the robot model
+    // these could be either the measured values, or commanded values
     _v = _robot.getJointVelocity();
     _a = _robot.getJointAcceleration();
-    /************************ COMPUTING BOUNDS ****************************/
     assert(_qDDDotLimit.size() == _x_size);
     for(unsigned int i = 0; i < _qDDDotLimit.size(); ++i)
     {
-        _lowerBound[i] = (-1.0*std::fabs(_qDDDotLimit[i])*_dT*_dT + _a[i]*_dT + _v[i]); // assume optimized velocity is in rad/second
+        // Note: assume optimized joint velocity is in rad/second
+        // this interpertation is different from the rest of OpenSoT which assumes rad/timestep
+        _lowerBound[i] = (-1.0*std::fabs(_qDDDotLimit[i])*_dT*_dT + _a[i]*_dT + _v[i]);
         _upperBound[i] = (1.0*std::fabs(_qDDDotLimit[i])*_dT*_dT + _a[i]*_dT + _v[i]);
 
     }
-    /**********************************************************************/
-    // for(unsigned int i = 0; i < _qDDDotLimit.size(); ++i)
-    // {
-    //     _outFile << _v[i];
-    //     if (i < _qDDDotLimit.size() - 1) {
-    //         _outFile << ",";
-    //     }
-    // }
-    // for(unsigned int i = 0; i < _qDDDotLimit.size(); ++i)
-    // {
-    //     _outFile << "," << _lowerBound[i];
-    // }
-    // for(unsigned int i = 0; i < _qDDDotLimit.size(); ++i)
-    // {
-    //     _outFile << "," << _a[i];
-    // }
-    // for(unsigned int i = 0; i < _qDDDotLimit.size(); ++i)
-    // {
-    //     _outFile << "," << _upperBound[i];
-    // }
-    // _outFile << "\n";
 }
 
 double JerkLimits::getDT()

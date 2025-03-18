@@ -7,10 +7,8 @@
 
 using namespace OpenSoT::constraints::velocity;
 
-JerkLimits::JerkLimits(const XBot::ModelInterface &robot, const Eigen::VectorXd &qDDDotLimit, const double dT,
-                       const double boundScaling)
-    : Constraint("jerk_limits", robot.getNv()), _robot(robot), _qDDDotLimit(qDDDotLimit), _dT(dT),
-      _boundScaling(boundScaling)
+JerkLimits::JerkLimits(const XBot::ModelInterface &robot, const Eigen::VectorXd &qDDDotLimit, const double dT)
+    : Constraint("jerk_limits", robot.getNv()), _robot(robot), _dT(dT)
 {
 
     if (qDDDotLimit.size() != _x_size)
@@ -19,22 +17,23 @@ JerkLimits::JerkLimits(const XBot::ModelInterface &robot, const Eigen::VectorXd 
     _lowerBound.setZero(_x_size);
     _upperBound.setZero(_x_size);
 
-    this->update();
+    this->setJerkLimits(qDDDotLimit);
 }
 
 void JerkLimits::update()
 {
     // the joint velocity and acceleration are obtained from the robot model
     // these could be either the measured values, or commanded values
-    _v = _robot.getJointVelocity();
-    _a = _robot.getJointAcceleration();
+    const Eigen::VectorXd& v = _robot.getJointVelocity();
+    const Eigen::VectorXd& a = _robot.getJointAcceleration();
     assert(_qDDDotLimit.size() == _x_size);
+
     for (unsigned int i = 0; i < _qDDDotLimit.size(); ++i)
     {
         // Note: assume optimized joint velocity is in rad/second
         // this interpertation is different from the rest of OpenSoT which assumes rad/timestep
-        _lowerBound[i] = (-1.0 * std::fabs(_qDDDotLimit[i]) * _dT * _dT + _a[i] * _dT + _v[i]);
-        _upperBound[i] = (1.0 * std::fabs(_qDDDotLimit[i]) * _dT * _dT + _a[i] * _dT + _v[i]);
+        _lowerBound[i] = ((-1.0 * _qDDDotLimit_dTScaled[i] + a[i]) * _dT + v[i]);
+        _upperBound[i] = ((1.0 * _qDDDotLimit_dTScaled[i] + a[i]) * _dT + v[i]);
     }
 }
 
@@ -45,16 +44,22 @@ double JerkLimits::getDT()
 
 Eigen::VectorXd JerkLimits::getJerkLimits()
 {
-    return _upperBound / (_dT * _dT);
+    return _qDDDotLimit;
 }
 
-void JerkLimits::setJerkLimits(const Eigen::VectorXd &qDotLimit)
+void JerkLimits::setJerkLimits(const Eigen::VectorXd &qDDDotLimit)
 {
-    this->_qDDDotLimit = qDotLimit;
+    _qDDDotLimit = qDDDotLimit;
+    _qDDDotLimit_dTScaled = qDDDotLimit.array().abs() * _dT;
     this->update();
 }
 
-void JerkLimits::setBoundScaling(const double boundScaling)
+Eigen::VectorXd JerkLimits::getLowerBound() const
 {
-    this->_boundScaling = boundScaling;
+    return _lowerBound;
+}
+
+Eigen::VectorXd JerkLimits::getUpperBound() const
+{
+    return _upperBound;
 }

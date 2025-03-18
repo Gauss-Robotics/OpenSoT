@@ -37,13 +37,13 @@ void pyVelocityAccelerationLimits(py::module &m)
 {
     py::class_<AccelerationLimits, std::shared_ptr<AccelerationLimits>,
                OpenSoT::Constraint<Eigen::MatrixXd, Eigen::VectorXd>>(m, "AccelerationLimits")
-        .def(py::init<const XBot::ModelInterface &, const Eigen::VectorXd &, const double, const double>(),
-             py::arg("model"), py::arg("qDDotLimit"), py::arg("dT"), py::arg("boundScaling"))
-        .def("getAccelerationLimits", &AccelerationLimits::getAccelerationLimits)
+        .def(py::init<const XBot::ModelInterface &, const Eigen::VectorXd &, const double>(),
+             py::arg("model"), py::arg("qDDotLimit"), py::arg("dT"))
+        .def("getLowerBound", &AccelerationLimits::getLowerBound)
+        .def("getUpperBound", &AccelerationLimits::getUpperBound)
         .def("setAccelerationLimits",
              py::overload_cast<const Eigen::VectorXd &>(&AccelerationLimits::setAccelerationLimits))
         .def("getDT", &AccelerationLimits::getDT)
-        .def("setBoundScaling", &AccelerationLimits::setBoundScaling)
         .def("update", &AccelerationLimits::update);
 }
 
@@ -51,12 +51,12 @@ void pyVelocityJerkLimits(py::module &m)
 {
     py::class_<JerkLimits, std::shared_ptr<JerkLimits>, OpenSoT::Constraint<Eigen::MatrixXd, Eigen::VectorXd>>(
         m, "JerkLimits")
-        .def(py::init<const XBot::ModelInterface &, const Eigen::VectorXd &, const double, const double>(),
-             py::arg("model"), py::arg("qDDDotLimit"), py::arg("dT"), py::arg("boundScaling"))
-        .def("getJerkLimits", &JerkLimits::getJerkLimits)
+        .def(py::init<const XBot::ModelInterface &, const Eigen::VectorXd &, const double>(),
+             py::arg("model"), py::arg("qDDDotLimit"), py::arg("dT"))
+        .def("getLowerBound", &JerkLimits::getLowerBound)
+        .def("getUpperBound", &JerkLimits::getUpperBound)
         .def("setJerkLimits", py::overload_cast<const Eigen::VectorXd &>(&JerkLimits::setJerkLimits))
         .def("getDT", &JerkLimits::getDT)
-        .def("setBoundScaling", &JerkLimits::setBoundScaling)
         .def("update", &JerkLimits::update);
 }
 

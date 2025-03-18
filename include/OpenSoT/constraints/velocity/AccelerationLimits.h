@@ -22,10 +22,9 @@ class AccelerationLimits : public Constraint<Eigen::MatrixXd, Eigen::VectorXd>
 
   private:
     const XBot::ModelInterface &_robot;
-    double _boundScaling;
     Eigen::VectorXd _qDDotLimit;
+    Eigen::VectorXd _qDDotLimit_dTScaled;
     double _dT;
-    Eigen::VectorXd _v; // joint velocities
 
   public:
     /**
@@ -34,15 +33,26 @@ class AccelerationLimits : public Constraint<Eigen::MatrixXd, Eigen::VectorXd>
      * @param dT the time constant at which we are performing velocity control [s]
      * @param x_size the size of the unknowns that we want to bound (it CANNOT be a subset)
      */
-    AccelerationLimits(const XBot::ModelInterface &robot, const Eigen::VectorXd &qDDotLimit, const double dT,
-                       const double boundScaling = 1.0);
+    AccelerationLimits(const XBot::ModelInterface &robot, const Eigen::VectorXd &qDDotLimit, const double dT);
+
+    /**
+     * @brief getLowerBound returns the current lower bounds on velocity command.
+     * @return lower limit imposed by the constraint.
+     */
+    Eigen::VectorXd getLowerBound() const;
+
+    /**
+     * @brief getUpperBound returns the current upper bounds on velocity command.
+     * @return upper limit imposed by the constraint.
+     */
+    Eigen::VectorXd getUpperBound() const;
 
     /**
      * @brief getAccelerationLimits returns the current acceleration limits.
      * @return the joint acceleration limits. It is always a positive double [rad/s^2]
      */
     Eigen::VectorXd getAccelerationLimits();
-
+    
     /**
      * @brief setAccelerationLimits
      * @param qDDotLimit the joint acceleration limits. It needs be a positive number [rad/s^2]
@@ -54,7 +64,6 @@ class AccelerationLimits : public Constraint<Eigen::MatrixXd, Eigen::VectorXd>
      * @return the system sample time in [s]
      */
     double getDT();
-    void setBoundScaling(const double boundScaling);
     void update();
 };
 } // namespace velocity

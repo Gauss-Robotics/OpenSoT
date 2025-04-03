@@ -168,7 +168,7 @@ set(OPENSOT_UTILS_SOURCES src/utils/AutoStack.cpp
     src/utils/Affine.cpp
     src/utils/AffineUtils.cpp
     src/utils/Indices.cpp
-   # src/utils/cartesian_utils.cpp
+    src/utils/cartesian_utils.cpp
     src/utils/InverseDynamics.cpp)
 
 if(${PCL_FOUND})
@@ -206,7 +206,7 @@ install(FILES ${CMAKE_BINARY_DIR}/include/OpenSoT/version.h
 TARGET_LINK_LIBRARIES(OpenSoT
     PUBLIC
     xbot2_interface::xbot2_interface
-    matlogger2::matlogger2
+    matlogger2::matlogger2 orocos-kdl
     PRIVATE
     ${PRIVATE_TLL})
     

@@ -8,8 +8,8 @@
 #include "tasks/velocity.hpp"
 #include "tasks/acceleration.hpp"
 #include "constraints/velocity.hpp"
-#include "constraints/acceleration.hpp"
-#include "constraints/force.hpp"
+//#include "constraints/acceleration.hpp"
+//#include "constraints/force.hpp"
 
 PYBIND11_MODULE(pyopensot, m) {
     pyTask<Eigen::MatrixXd, Eigen::VectorXd>(m, "Task");
@@ -42,12 +42,12 @@ PYBIND11_MODULE(pyopensot, m) {
     pyVelocityMinimumEffort(m_tv);
     pyVelocityCartesianAdmittance(m_tv);
 
-    auto m_ta = m_t.def_submodule("acceleration");
-    pyAccelerationPostural(m_ta);
-    pyAccelerationCartesian(m_ta);
-    pyAccelerationAngularMomentum(m_ta);
-    pyAccelerationCoM(m_ta);
-    pyDynamicFeasibility(m_ta);
+    //auto m_ta = m_t.def_submodule("acceleration");
+    //pyAccelerationPostural(m_ta);
+   // pyAccelerationCartesian(m_ta);
+    //pyAccelerationAngularMomentum(m_ta);
+    //pyAccelerationCoM(m_ta);
+    //pyDynamicFeasibility(m_ta);
 
     auto m_c = m.def_submodule("constraints");
 
@@ -56,14 +56,14 @@ PYBIND11_MODULE(pyopensot, m) {
     pyVelocityLimits(m_cv);
     pyVelocityOmniWheels4X(m_cv);
 
-    auto m_ca = m_c.def_submodule("acceleration");
-    pyAccelerationJointLimits(m_ca);
-    pyTorqueLimits(m_ca);
-    pyAVelocityLimits(m_ca);
+    //auto m_ca = m_c.def_submodule("acceleration");
+    //pyAccelerationJointLimits(m_ca);
+    //pyTorqueLimits(m_ca);
+    //pyAVelocityLimits(m_ca);
 
-    auto m_cf = m_c.def_submodule("force");
-    pyForceCoP(m_cf);
-    pyForceFrictionCone(m_cf);
-    pyForceNormalTorque(m_cf);
-    pyWrenchLimits(m_cf);
+    //auto m_cf = m_c.def_submodule("force");
+    //pyForceCoP(m_cf);
+    //pyForceFrictionCone(m_cf);
+    //pyForceNormalTorque(m_cf);
+    //pyWrenchLimits(m_cf);
 }

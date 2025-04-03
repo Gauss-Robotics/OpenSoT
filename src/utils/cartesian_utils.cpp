@@ -19,10 +19,39 @@
 
 #include <OpenSoT/utils/cartesian_utils.h>
 #include <memory>
-#include <tf2_eigen_kdl/tf2_eigen_kdl.hpp>
 
 #define toDeg(X) (X*180.0/M_PI)
 
+template<typename T>
+void transformKDLToEigenImpl(const KDL::Frame & k, T & e)
+{
+  // translation
+  for (unsigned int i = 0; i < 3; ++i) {
+    e(i, 3) = k.p[i];
+  }
+
+  // rotation matrix
+  for (unsigned int i = 0; i < 9; ++i) {
+    e(i / 3, i % 3) = k.M.data[i];
+  }
+
+  // "identity" row
+  e(3, 0) = 0.0;
+  e(3, 1) = 0.0;
+  e(3, 2) = 0.0;
+  e(3, 3) = 1.0;
+}
+
+template<typename T>
+void transformEigenToKDLImpl(const T & e, KDL::Frame & k)
+{
+  for (unsigned int i = 0; i < 3; ++i) {
+    k.p[i] = e(i, 3);
+  }
+  for (unsigned int i = 0; i < 9; ++i) {
+    k.M.data[i] = e(i / 3, i % 3);
+  }
+}
 
 void  cartesian_utils::computePanTiltMatrix(const Eigen::VectorXd &gaze, KDL::Frame &pan_tilt_matrix)
 {
@@ -45,14 +74,14 @@ void cartesian_utils::computeCartesianError(const Eigen::Matrix4d &T,
     KDL::Frame x; // ee pose
     x.Identity();
     Eigen::Matrix4d tmp = T;
-    tf2::transformEigenToKDL(Eigen::Affine3d(tmp),x);
+    transformEigenToKDLImpl(Eigen::Affine3d(tmp),x);
     quaternion q;
     x.M.GetQuaternion(q.x, q.y, q.z, q.w);
 
     KDL::Frame xd; // ee desired pose
     xd.Identity();
     tmp = Td;
-    tf2::transformEigenToKDL(Eigen::Affine3d(tmp),xd);
+    transformEigenToKDLImpl(Eigen::Affine3d(tmp),xd);
     quaternion qd;
     xd.M.GetQuaternion(qd.x, qd.y, qd.z, qd.w);
 

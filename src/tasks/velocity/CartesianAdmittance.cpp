@@ -109,6 +109,11 @@ OpenSoT::tasks::velocity::CartesianAdmittance::Ptr CartesianAdmittance::asCartes
     return std::dynamic_pointer_cast<OpenSoT::tasks::velocity::CartesianAdmittance>(task);
 }
 
+const Eigen::Vector6d& CartesianAdmittance::getFilterOmega()
+{
+    return _w;
+}
+
 const Eigen::Matrix6d& CartesianAdmittance::getCartesianCompliance()
 {
     _tmp_mat6 = _C.asDiagonal();

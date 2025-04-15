@@ -70,6 +70,8 @@ void pyVelocityCartesianAdmittance(py::module & m) {
     py::class_<CartesianAdmittance, std::shared_ptr<CartesianAdmittance>, Cartesian>(m, "CartesianAdmittance")
         .def(py::init<std::string, XBot::ModelInterface&, std::string, XBot::ForceTorqueSensor::ConstPtr>())
         .def("getCartesianCompliance",py::overload_cast<>(&CartesianAdmittance::getCartesianCompliance))
+        .def("getFilterOmega",py::overload_cast<>(&CartesianAdmittance::getFilterOmega))
+        .def("getFilterTimeStep",py::overload_cast<>(&CartesianAdmittance::getFilterTimeStep))
         .def("setWrenchReference", py::overload_cast<const Eigen::Vector6d&>(&CartesianAdmittance::setWrenchReference))
         .def("getWrenchReference", py::overload_cast<>(&CartesianAdmittance::getWrenchReference))
         .def("setFilterDamping", &CartesianAdmittance::setFilterDamping)

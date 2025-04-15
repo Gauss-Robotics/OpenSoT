@@ -274,6 +274,12 @@ namespace OpenSoT {
                                 XBot::ForceTorqueSensor::ConstPtr ft_sensor);
 
            /**
+            * @brief getFilterOmega
+            * @return the filter omega vector
+            */
+            const Eigen::Vector6d& getFilterOmega();           
+            
+            /**
             * @brief getCartesianCompliance
             * @return the actual Compliance matrix
             */

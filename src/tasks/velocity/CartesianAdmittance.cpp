@@ -120,6 +120,11 @@ const Eigen::Matrix6d& CartesianAdmittance::getCartesianCompliance()
     return _tmp_mat6;
 }
 
+double CartesianAdmittance::getLambda()
+{
+    return _lambda;
+}
+
 void CartesianAdmittance::getCartesianCompliance(Eigen::Matrix6d& C)
 {
     C = _C.asDiagonal();
@@ -128,7 +133,21 @@ void CartesianAdmittance::getCartesianCompliance(Eigen::Matrix6d& C)
 
 double CartesianAdmittance::getFilterTimeStep()
 {
-    return _dt;
+    int channel = 0;
+    for(unsigned int i = 1; i < _filter.getNumberOfChannels(); ++i)
+    {
+        if(_filter.getTimeStep(i) != _filter.getTimeStep(channel))
+        {
+            XBot::Logger::error("Filter time step is not the same for all channels! \nChannel %d has time step %f, while channel %d has time step %f\n", i, _filter.getTimeStep(i), channel, _filter.getTimeStep(channel));
+            return -1;
+        }
+    }
+    if(_filter.getTimeStep(channel) != _dt)
+    {
+        XBot::Logger::error("Filter time step is not equal to Admittance Task dt! \nFilter time step: %f, Admittance Task dt: %f\n", _filter.getTimeStep(channel), _dt);
+        return -1;
+    }
+    return _filter.getTimeStep(channel);
 }
 
 void CartesianAdmittance::setFilterDamping(const double damping)
@@ -288,7 +307,6 @@ bool OpenSoT::tasks::velocity::CartesianAdmittance::setRawParams(const Eigen::Ve
     _M = _C.cwiseProduct(omega).cwiseInverse() * dt;
     _w = omega;
     _dt = dt;
-    
     
     return true;
 }

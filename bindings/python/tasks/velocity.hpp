@@ -74,6 +74,7 @@ void pyVelocityCartesianAdmittance(py::module & m) {
         .def("getFilterTimeStep",py::overload_cast<>(&CartesianAdmittance::getFilterTimeStep))
         .def("setWrenchReference", py::overload_cast<const Eigen::Vector6d&>(&CartesianAdmittance::setWrenchReference))
         .def("getWrenchReference", py::overload_cast<>(&CartesianAdmittance::getWrenchReference))
+        .def("getLambda", py::overload_cast<>(&CartesianAdmittance::getLambda))
         .def("setFilterDamping", &CartesianAdmittance::setFilterDamping)
         .def("setImpedanceParams", &CartesianAdmittance::setImpedanceParams)
         .def("setRawParams",&CartesianAdmittance::setRawParams)

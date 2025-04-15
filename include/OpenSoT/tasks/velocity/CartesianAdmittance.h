@@ -351,6 +351,12 @@ namespace OpenSoT {
            const Eigen::Matrix6d getDamping();
            
            double getFilterTimeStep();
+
+            /**
+            * @brief getLambda
+            * @return lambda of Cartesian Task
+            */
+            double getLambda();
            
            void setFilterDamping(const double damping);
            

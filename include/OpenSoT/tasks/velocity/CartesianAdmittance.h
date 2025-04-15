@@ -352,13 +352,15 @@ namespace OpenSoT {
            
            double getFilterTimeStep();
 
+            void setFilterTimeStep(const double time_step);
+
             /**
             * @brief getLambda
             * @return lambda of Cartesian Task
             */
             double getLambda();
            
-           void setFilterDamping(const double damping);
+            void setFilterDamping(const double damping);
            
            /**
            * @brief Set impedance parameters to be emulated via admittance control.

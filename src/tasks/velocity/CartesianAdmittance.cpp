@@ -262,6 +262,7 @@ void CartesianAdmittance::setImpedanceParams(const Eigen::Vector6d& K,
             _D = D;
             _K = K;
             _dt = dt;
+            setFilterTimeStep(_dt); // should be added here - probably ommited by mistake
             setFilterOmega(_w);
         }
    }
@@ -293,12 +294,9 @@ bool OpenSoT::tasks::velocity::CartesianAdmittance::setRawParams(const Eigen::Ve
     }
     
     _C = C;
-    
-    for(unsigned int i = 0; i < _filter.getNumberOfChannels(); ++i)
-    {
-        _filter.setTimeStep(dt, i);
-        _filter.setOmega(omega[i], i);
-    }
+
+    setFilterTimeStep(dt);
+    setFilterOmega(omega);
     
     _lambda = lambda;
     
@@ -315,6 +313,12 @@ void CartesianAdmittance::setFilterOmega(const Eigen::Vector6d& w)
 {
     for(unsigned int i = 0; i < CHANNELS; ++i)
         _filter.setOmega(w[i], i);
+}
+
+void CartesianAdmittance::setFilterTimeStep(const double dt)
+{
+    for(unsigned int i = 0; i < CHANNELS; ++i)
+        _filter.setTimeStep(dt, i);
 }
 
 void CartesianAdmittance::apply_deadzone(Eigen::Vector6d& data)

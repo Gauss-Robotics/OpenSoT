@@ -277,7 +277,7 @@ namespace OpenSoT {
             * @brief getFilterOmega
             * @return the filter omega vector
             */
-            const Eigen::Vector6d& getFilterOmega();           
+           const Eigen::Vector6d& getFilterOmega();           
             
            /**
             * @brief getCartesianCompliance

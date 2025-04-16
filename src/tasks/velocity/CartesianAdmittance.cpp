@@ -262,7 +262,7 @@ void CartesianAdmittance::setImpedanceParams(const Eigen::Vector6d& K,
             _D = D;
             _K = K;
             _dt = dt;
-            setFilterTimeStep(_dt); // should be added here - probably ommited by mistake
+            setFilterTimeStep(_dt);
             setFilterOmega(_w);
         }
    }

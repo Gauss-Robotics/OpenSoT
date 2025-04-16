@@ -279,7 +279,7 @@ namespace OpenSoT {
             */
             const Eigen::Vector6d& getFilterOmega();           
             
-            /**
+           /**
             * @brief getCartesianCompliance
             * @return the actual Compliance matrix
             */
@@ -352,15 +352,15 @@ namespace OpenSoT {
            
            double getFilterTimeStep();
 
-            void setFilterTimeStep(const double time_step);
+           void setFilterTimeStep(const double time_step);
 
-            /**
+           /**
             * @brief getLambda
             * @return lambda of Cartesian Task
             */
-            double getLambda();
+           double getLambda();
            
-            void setFilterDamping(const double damping);
+           void setFilterDamping(const double damping);
            
            /**
            * @brief Set impedance parameters to be emulated via admittance control.

@@ -130,7 +130,6 @@ void CartesianAdmittance::getCartesianCompliance(Eigen::Matrix6d& C)
     C = _C.asDiagonal();
 }
 
-
 double CartesianAdmittance::getFilterTimeStep()
 {
     int channel = 0;
@@ -190,8 +189,6 @@ const Eigen::Matrix6d CartesianAdmittance::getDamping()
     return _D.asDiagonal();
 }
 
-
-
 bool CartesianAdmittance::computeParameters(const Eigen::Vector6d& K, 
                                             const Eigen::Vector6d& D, 
                                             const double lambda, 
@@ -221,8 +218,6 @@ bool CartesianAdmittance::computeParameters(const Eigen::Vector6d& K,
 
     return true;
 }
-
-
 
 void CartesianAdmittance::setImpedanceParams(const Eigen::Vector6d& K, 
                                              const Eigen::Vector6d& D, 

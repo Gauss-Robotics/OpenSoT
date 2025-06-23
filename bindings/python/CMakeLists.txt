@@ -33,6 +33,8 @@ if(${pybind11_FOUND})
     pybind11_add_module(pyopensot ${OPENSOT_BINDINGS_SOURCES})
 
     target_link_libraries(pyopensot PUBLIC OpenSoT)
+    set_target_properties(pyopensot PROPERTIES INSTALL_RPATH "$ORIGIN/../..")
+
 
     # Check if we install into system pathes ( something /usr/* )
     # In Debian/Ubuntu site-packages are named dist-packages there
@@ -59,6 +61,7 @@ if(${pybind11_FOUND})
         pybind11_add_module(pyopensot_collision ${OPENSOT_BINDINGS_COLLISION_SOURCES})
 
         target_link_libraries(pyopensot_collision PUBLIC OpenSoT)
+        set_target_properties(pyopensot_collision PROPERTIES INSTALL_RPATH "$ORIGIN/../..")
 
         install(TARGETS pyopensot_collision
             COMPONENT python

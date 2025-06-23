@@ -4,7 +4,7 @@
 
 cmake_minimum_required(VERSION 3.10)
 include(ExternalProject)
-project(open_sot VERSION 4.0.0)
+project(open_sot VERSION 4.0.1)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -20,6 +20,8 @@ if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 
 set(${CMAKE_PROJECT_NAME}_CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE})
+
+set(CMAKE_INSTALL_RPATH $ORIGIN)
 
 add_subdirectory(doc)
 

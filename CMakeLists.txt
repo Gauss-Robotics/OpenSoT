@@ -2,7 +2,7 @@
 # Authors: Enrico Mingo Hoffman, Alessio Rocchi
 # CopyPolicy: Released under the terms of the GNU GPL v2.0.
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 include(ExternalProject)
 project(open_sot VERSION 4.0.1)
 
@@ -28,6 +28,8 @@ if (NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 
 set(${CMAKE_PROJECT_NAME}_CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE})
+
+set(CMAKE_INSTALL_RPATH $ORIGIN)
 
 add_subdirectory(doc)
 

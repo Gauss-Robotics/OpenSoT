@@ -13,6 +13,7 @@ message(STATUS "check for pybind11")
 if(${pybind11_FOUND})
 
     message(STATUS "compiling python bindings")
+    find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 
     set(OPENSOT_BINDINGS_SOURCES    pyopensot.cpp
                                     variables.hpp
@@ -32,30 +33,39 @@ if(${pybind11_FOUND})
     pybind11_add_module(pyopensot ${OPENSOT_BINDINGS_SOURCES})
 
     target_link_libraries(pyopensot PUBLIC OpenSoT)
+    set_target_properties(pyopensot PROPERTIES INSTALL_RPATH "$ORIGIN/../..")
 
 
-    find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+    # Check if we install into system pathes ( something /usr/* )
+    # In Debian/Ubuntu site-packages are named dist-packages there
+    # Otherwise install as site-packages
+    string(REGEX MATCH "^/usr/" IS_ROOT_USR_PATH ${CMAKE_INSTALL_PREFIX})
+    if("${IS_ROOT_USR_PATH}" STREQUAL "/usr/")
+        set(SITE_DIRECTORY_NAME "dist-packages")
+    else()
+        set(SITE_DIRECTORY_NAME "site-packages")
+    endif()
+
+    set(PYTHON_SITE "lib/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/${SITE_DIRECTORY_NAME}")
+    message(STATUS "Python site: ${PYTHON_SITE}")
 
     install(TARGETS pyopensot
         COMPONENT python
-        LIBRARY DESTINATION "/usr/local/lib/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/dist-packages"
+        LIBRARY DESTINATION "${PYTHON_SITE}"
         ARCHIVE DESTINATION "lib"
         RUNTIME DESTINATION "bin")
 
     if(${OPENSOT_COMPILE_COLLISION})
         set(OPENSOT_BINDINGS_COLLISION_SOURCES pyopensot_collision.cpp constraints/velocity_collision.hpp)
 
-        include_directories(${CMAKE_CURRENT_SOURCE_DIR})
         pybind11_add_module(pyopensot_collision ${OPENSOT_BINDINGS_COLLISION_SOURCES})
 
         target_link_libraries(pyopensot_collision PUBLIC OpenSoT)
-
-
-        find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+        set_target_properties(pyopensot_collision PROPERTIES INSTALL_RPATH "$ORIGIN/../..")
 
         install(TARGETS pyopensot_collision
             COMPONENT python
-            LIBRARY DESTINATION "~/.local/lib/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages"
+            LIBRARY DESTINATION "${PYTHON_SITE}"
             ARCHIVE DESTINATION "lib"
             RUNTIME DESTINATION "bin")
     endif()
@@ -63,16 +73,13 @@ if(${pybind11_FOUND})
     if(${OPENSOT_SOTH_FRONT_END})
         set(OPENSOT_BINDINGS_HCOD_SOURCES pyopensot_hcod.cpp solver_hcod.hpp)
 
-        include_directories(${CMAKE_CURRENT_SOURCE_DIR})
         pybind11_add_module(pyopensot_hcod ${OPENSOT_BINDINGS_HCOD_SOURCES})
 
         target_link_libraries(pyopensot_hcod PUBLIC OpenSoT)
 
-        find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
-
         install(TARGETS pyopensot_hcod
             COMPONENT python
-            LIBRARY DESTINATION "~/.local/lib/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages"
+            LIBRARY DESTINATION "${PYTHON_SITE}"
             ARCHIVE DESTINATION "lib"
             RUNTIME DESTINATION "bin")
     endif()
